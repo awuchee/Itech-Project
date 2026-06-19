@@ -1,0 +1,6 @@
+{
+  "name": "Global Opportunities Hub",
+  "description": "Global Opportunities Hub is a platform where users can discover, search, save, and apply for international opportunities from around the world in one place.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

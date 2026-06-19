@@ -1,0 +1,31 @@
+# Next.js build and dependency files
+node_modules/
+.next/
+out/
+build/
+
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDEs and OS files
+.DS_Store
+*.pem
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Android left-overs (if any)
+*.iml
+.gradle
+.kotlin
+local.properties
+debug.keystore
+debug.keystore.base64
