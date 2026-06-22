@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AppProvider } from "../contexts/AppContext";
+import AppLayoutShell from "../components/AppLayoutShell";
 
 export const metadata: Metadata = {
   title: "Global Opportunities Hub — Jobs, Scholarships & More",
@@ -12,15 +14,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-slate-950 text-slate-100 antialiased selection:bg-indigo-600/30 selection:text-white">
-        {children}
+      <body className="antialiased selection:bg-indigo-600/30 selection:text-white">
+        <AppProvider>
+          <AppLayoutShell>{children}</AppLayoutShell>
+        </AppProvider>
       </body>
     </html>
   );

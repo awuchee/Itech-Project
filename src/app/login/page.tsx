@@ -1,5 +1,9 @@
-import AppShell from "../../components/AppShell";
+"use client";
+
+import { useApp } from "../../contexts/AppContext";
+import AuthScreen from "../../components/AuthScreen";
 
 export default function LoginPage() {
-  return <AppShell section="login" />;
+  const { handleAuthSuccess } = useApp();
+  return <AuthScreen onAuthSuccess={handleAuthSuccess} />;
 }

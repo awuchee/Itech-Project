@@ -1,5 +1,7 @@
-import AppShell from "../../components/AppShell";
+"use client";
+
+import ContactScreen from "../../components/ContactScreen";
 
 export default function ContactPage() {
-  return <AppShell section="contact" />;
+  return <ContactScreen />;
 }

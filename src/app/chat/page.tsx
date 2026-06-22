@@ -1,5 +1,17 @@
-import AppShell from "../../components/AppShell";
+"use client";
+
+import { useApp } from "../../contexts/AppContext";
+import AiChatbotScreen from "../../components/AiChatbotScreen";
 
 export default function ChatPage() {
-  return <AppShell section="chat" />;
+  const { chatMessages, isChatSending, handleSendMessage, handleClearChatHistory } = useApp();
+
+  return (
+    <AiChatbotScreen
+      messages={chatMessages}
+      isSending={isChatSending}
+      onSendMessage={handleSendMessage}
+      onClearHistory={handleClearChatHistory}
+    />
+  );
 }

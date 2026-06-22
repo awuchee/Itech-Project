@@ -1,5 +1,9 @@
-import AppShell from "../components/AppShell";
+"use client";
 
-export default function RootPage() {
-  return <AppShell section="landing" />;
+import { useApp } from "../contexts/AppContext";
+import LandingPage from "../components/LandingPage";
+
+export default function HomePage() {
+  const { opportunities } = useApp();
+  return <LandingPage opportunities={opportunities} />;
 }

@@ -1,5 +1,7 @@
-import AppShell from "../../components/AppShell";
+"use client";
+
+import AboutScreen from "../../components/AboutScreen";
 
 export default function AboutPage() {
-  return <AppShell section="about" />;
+  return <AboutScreen />;
 }
