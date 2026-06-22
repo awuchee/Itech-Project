@@ -5,13 +5,7 @@ import { useApp } from "../../contexts/AppContext";
 import AdminDashboardScreen from "../../components/AdminDashboardScreen";
 
 export default function AdminPage() {
-  const {
-    userProfile,
-    opportunities,
-    handlePostOpportunity,
-    handleApproveOpportunity,
-    handleRejectOpportunity,
-  } = useApp();
+  const { userProfile } = useApp();
 
   if (userProfile?.role !== "ADMIN" && userProfile?.role !== "RECRUITER") {
     return (
@@ -25,13 +19,5 @@ export default function AdminPage() {
     );
   }
 
-  return (
-    <AdminDashboardScreen
-      opportunities={opportunities}
-      userProfile={userProfile}
-      onPostOpportunity={handlePostOpportunity}
-      onApproveOpportunity={handleApproveOpportunity}
-      onRejectOpportunity={handleRejectOpportunity}
-    />
-  );
+  return <AdminDashboardScreen />;
 }

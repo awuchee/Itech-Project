@@ -16,8 +16,7 @@ interface Notification {
 interface AppContextValue {
   // State
   userProfile: UserProfile | null;
-  opportunities: Opportunity[];
-  savedBookmarkIds: (string | number)[];
+  opportunities: Opportunity[]; // small curated list used by the Document Generator's opportunity picker
   applicationRecords: ApplicationRecord[];
   chatMessages: ChatMessage[];
   isChatSending: boolean;
@@ -33,16 +32,10 @@ interface AppContextValue {
   // Handlers
   handleAuthSuccess: (email: string, fullName: string, role: string) => void;
   handleSignOut: () => void;
-  handleToggleBookmark: (id: string | number) => void;
-  handleApplyOpportunity: (opp: Opportunity, notes: string) => void;
   handleWithdrawApplication: (appId: string | number) => void;
   handleSendMessage: (text: string) => void;
   handleClearChatHistory: () => void;
   handlePreloadDocDrawer: (opp: Opportunity) => void;
-  handleAddReview: (opportunityId: string | number, score: number) => void;
-  handlePostOpportunity: (newOpp: Omit<Opportunity, "id">) => void;
-  handleApproveOpportunity: (oppId: string | number) => void;
-  handleRejectOpportunity: (oppId: string | number) => void;
   markAllNotificationsRead: () => void;
   persistProfile: (profile: UserProfile | null) => void;
 }
@@ -59,8 +52,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [opportunities, setOpportunities] = useState<Opportunity[]>(MOCK_OPPORTUNITIES);
-  const [savedBookmarkIds, setSavedBookmarkIds] = useState<(string | number)[]>([]);
+  const [opportunities] = useState<Opportunity[]>(MOCK_OPPORTUNITIES);
   const [applicationRecords, setApplicationRecords] = useState<ApplicationRecord[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [isChatSending, setIsChatSending] = useState(false);
@@ -79,14 +71,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const p = localStorage.getItem("user_profile");
     if (p) setUserProfile(JSON.parse(p));
 
-    const b = localStorage.getItem("saved_bookmarks");
-    if (b) setSavedBookmarkIds(JSON.parse(b));
-
     const a = localStorage.getItem("application_records");
     if (a) setApplicationRecords(JSON.parse(a));
-
-    const o = localStorage.getItem("custom_opportunities");
-    if (o) setOpportunities(JSON.parse(o));
 
     const pre = localStorage.getItem("preloaded_opportunity");
     if (pre) {
@@ -135,42 +121,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const handleSignOut = useCallback(() => {
     persistProfile(null);
-    setSavedBookmarkIds([]);
     setApplicationRecords([]);
     router.push("/");
   }, [persistProfile, router]);
-
-  const handleToggleBookmark = useCallback((id: string | number) => {
-    if (!userProfile) { router.push("/login"); return; }
-    setSavedBookmarkIds((prev) => {
-      const updated = prev.includes(id) ? prev.filter((bid) => bid !== id) : [...prev, id];
-      localStorage.setItem("saved_bookmarks", JSON.stringify(updated));
-      return updated;
-    });
-  }, [userProfile, router]);
-
-  const handleApplyOpportunity = useCallback((opp: Opportunity, notes: string) => {
-    if (!userProfile) { router.push("/login"); return; }
-    const newRecord: ApplicationRecord = {
-      id: `app_${Date.now()}`,
-      userId: userProfile.email,
-      opportunityId: opp.id,
-      opportunityTitle: opp.title,
-      organization: opp.organization,
-      status: "Applied",
-      appliedDate: new Date().toISOString().split("T")[0],
-      notes,
-    };
-    setApplicationRecords((prev) => {
-      const updated = [newRecord, ...prev];
-      localStorage.setItem("application_records", JSON.stringify(updated));
-      return updated;
-    });
-    setNotifications((prev) => [
-      { id: Date.now(), text: `Applied for ${opp.title} at ${opp.organization}.`, date: "Just now", unread: true },
-      ...prev,
-    ]);
-  }, [userProfile, router]);
 
   const handleWithdrawApplication = useCallback((appId: string | number) => {
     setApplicationRecords((prev) => {
@@ -212,43 +165,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     router.push("/docs");
   }, [router]);
 
-  const handleAddReview = useCallback((opportunityId: string | number, score: number) => {
-    setOpportunities((prev) => {
-      const updated = prev.map((opp) => {
-        if (opp.id !== opportunityId) return opp;
-        const past = opp.rating || 4.5;
-        return { ...opp, rating: Math.min(5, Math.max(1, (past * 4 + score) / 5)) };
-      });
-      localStorage.setItem("custom_opportunities", JSON.stringify(updated));
-      return updated;
-    });
-  }, []);
-
-  const handlePostOpportunity = useCallback((newOpp: Omit<Opportunity, "id">) => {
-    const finalOpp: Opportunity = { ...newOpp, id: `opp_${Date.now()}` };
-    setOpportunities((prev) => {
-      const updated = [finalOpp, ...prev];
-      localStorage.setItem("custom_opportunities", JSON.stringify(updated));
-      return updated;
-    });
-  }, []);
-
-  const handleApproveOpportunity = useCallback((oppId: string | number) => {
-    setOpportunities((prev) => {
-      const updated = prev.map((o) => o.id === oppId ? { ...o, status: "APPROVED" } : o);
-      localStorage.setItem("custom_opportunities", JSON.stringify(updated));
-      return updated;
-    });
-  }, []);
-
-  const handleRejectOpportunity = useCallback((oppId: string | number) => {
-    setOpportunities((prev) => {
-      const updated = prev.filter((o) => o.id !== oppId);
-      localStorage.setItem("custom_opportunities", JSON.stringify(updated));
-      return updated;
-    });
-  }, []);
-
   const markAllNotificationsRead = useCallback(() => {
     setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
   }, []);
@@ -258,7 +174,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       value={{
         userProfile,
         opportunities,
-        savedBookmarkIds,
         applicationRecords,
         chatMessages,
         isChatSending,
@@ -270,16 +185,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setPreloadedOpportunity,
         handleAuthSuccess,
         handleSignOut,
-        handleToggleBookmark,
-        handleApplyOpportunity,
         handleWithdrawApplication,
         handleSendMessage,
         handleClearChatHistory,
         handlePreloadDocDrawer,
-        handleAddReview,
-        handlePostOpportunity,
-        handleApproveOpportunity,
-        handleRejectOpportunity,
         markAllNotificationsRead,
         persistProfile,
       }}

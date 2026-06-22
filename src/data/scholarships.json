@@ -1,0 +1,82 @@
+[
+  {
+    "id": "sch-001",
+    "title": "Gates Cambridge Scholarship",
+    "company": "Bill & Melinda Gates Foundation",
+    "location": "Cambridge, United Kingdom",
+    "salary": "£18,000 stipend + full tuition",
+    "applyUrl": "https://www.gatescambridge.org",
+    "postedAt": "2026-01-15",
+    "description": "Fully-funded postgraduate scholarship for outstanding applicants from outside the UK to pursue a full-time postgraduate degree in any subject at the University of Cambridge. Covers tuition fees, a maintenance allowance, and airfare. Selection is based on academic excellence, leadership potential, and commitment to improving the lives of others."
+  },
+  {
+    "id": "sch-002",
+    "title": "DAAD Scholarships for Development-Related Postgraduate Courses",
+    "company": "German Academic Exchange Service (DAAD)",
+    "location": "Germany",
+    "salary": "€934 - €1,300 monthly stipend",
+    "applyUrl": "https://www.daad.de/en",
+    "postedAt": "2026-02-01",
+    "description": "DAAD offers fully-funded scholarships for graduates from developing countries to pursue postgraduate studies at German universities. Covers monthly stipend, health insurance, travel allowance, and tuition. Open to candidates with at least two years of professional experience after their first degree."
+  },
+  {
+    "id": "sch-003",
+    "title": "Fulbright Foreign Student Program",
+    "company": "U.S. Department of State / Fulbright Commission",
+    "location": "United States",
+    "salary": "Full tuition + living stipend",
+    "applyUrl": "https://foreign.fulbrightonline.org",
+    "postedAt": "2026-01-05",
+    "description": "Fully-funded scholarship enabling graduate students, young professionals, and artists from abroad to study and conduct research in the United States. Covers tuition, airfare, a living stipend, and health insurance for the duration of the program."
+  },
+  {
+    "id": "sch-004",
+    "title": "Chevening Scholarships",
+    "company": "UK Foreign, Commonwealth & Development Office",
+    "location": "United Kingdom",
+    "salary": "Full tuition + monthly stipend",
+    "applyUrl": "https://www.chevening.org",
+    "postedAt": "2026-08-01",
+    "description": "The UK government's global scholarship programme, funding one-year master's degrees at any UK university. Covers tuition fees, a monthly living allowance, return flights, and an arrival allowance. Open to future leaders and influencers from Chevening-eligible countries."
+  },
+  {
+    "id": "sch-005",
+    "title": "Erasmus Mundus Joint Master Degrees",
+    "company": "European Commission",
+    "location": "Multiple European Universities",
+    "salary": "€1,400 monthly + travel & tuition covered",
+    "applyUrl": "https://www.eacea.ec.europa.eu/scholarships/erasmus-mundus-catalogue_en",
+    "postedAt": "2026-03-01",
+    "description": "Prestigious, fully-funded joint master's programmes delivered by consortia of European universities. Covers tuition, travel costs, installation costs, and a monthly subsistence allowance. Students typically study in at least two different European countries during the programme."
+  },
+  {
+    "id": "sch-006",
+    "title": "Commonwealth Scholarships for Master's and PhD Study",
+    "company": "Commonwealth Scholarship Commission",
+    "location": "United Kingdom",
+    "salary": "Full tuition + living allowance",
+    "applyUrl": "https://cscuk.fcdo.gov.uk",
+    "postedAt": "2026-09-01",
+    "description": "Funded by UK aid, these scholarships support talented and committed individuals from Commonwealth low- and middle-income countries to pursue master's and PhD study in the UK. Covers tuition fees, airfare, and a living allowance, with a focus on development impact."
+  },
+  {
+    "id": "sch-007",
+    "title": "Rhodes Scholarship at the University of Oxford",
+    "company": "Rhodes Trust",
+    "location": "Oxford, United Kingdom",
+    "salary": "Full tuition + living stipend",
+    "applyUrl": "https://www.rhodeshouse.ox.ac.uk",
+    "postedAt": "2026-07-01",
+    "description": "One of the oldest and most prestigious international scholarships, funding postgraduate study at the University of Oxford. Covers full tuition, a living stipend, and additional allowances for travel and research, awarded on the basis of academic excellence and character."
+  },
+  {
+    "id": "sch-008",
+    "title": "CERN Openlab Summer Student Programme",
+    "company": "CERN (European Organization for Nuclear Research)",
+    "location": "Geneva, Switzerland",
+    "salary": "CHF 3,200 monthly allowance",
+    "applyUrl": "https://openlab.cern",
+    "postedAt": "2026-04-01",
+    "description": "A nine-week summer programme for university students in computer science, mathematics, or physics to work on advanced computing projects at CERN. Includes a monthly living allowance, travel allowance, health insurance, and guidance from leading scientists and engineers."
+  }
+]

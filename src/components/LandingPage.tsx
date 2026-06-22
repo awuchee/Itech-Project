@@ -269,10 +269,10 @@ function JobBoardCard() {
 
   useEffect(() => {
     let active = true;
-    fetch("/api/jobs/search?page=1")
+    fetch("/api/opportunities/search?category=Jobs&page=1")
       .then((res) => res.json())
       .then((data) => {
-        if (active) setJobs((data.jobs || []).slice(0, 3));
+        if (active) setJobs((data.opportunities || []).slice(0, 3));
       })
       .catch(() => {
         if (active) setJobs([]);

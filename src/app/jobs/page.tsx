@@ -1,7 +1,7 @@
 "use client";
 
-import JobSearchScreen from "../../components/JobSearchScreen";
+import OpportunitySearchScreen from "../../components/OpportunitySearchScreen";
 
 export default function JobsPage() {
-  return <JobSearchScreen />;
+  return <OpportunitySearchScreen category="Jobs" />;
 }
