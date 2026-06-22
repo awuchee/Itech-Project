@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Search,
@@ -37,9 +37,6 @@ export default function LandingPage({ opportunities }: LandingPageProps) {
   const approved = opportunities.filter(
     (o) => o.status === "APPROVED" || o.status === "Active"
   );
-  const featuredJobs = approved
-    .filter((o) => o.category === "Jobs Abroad")
-    .slice(0, 3);
   const scholarships = approved
     .filter((o) => o.category === "Scholarships")
     .slice(0, 3);
@@ -150,7 +147,7 @@ export default function LandingPage({ opportunities }: LandingPageProps) {
       {/* ═══════════════════════════ FEATURE CARDS ═══════════════════════════ */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-          <JobBoardCard jobs={featuredJobs} />
+          <JobBoardCard />
           <ScholarshipCard scholarships={scholarships} />
           <ApprenticeshipsCard />
           <NannyCareCard />
@@ -253,17 +250,39 @@ export default function LandingPage({ opportunities }: LandingPageProps) {
 }
 
 /* ══════════════════════════════════════════════
-   CARD 1 — Global Job Board
+   CARD 1 — Global Job Board (live Adzuna preview)
 ══════════════════════════════════════════════ */
-const COMPANY_COLORS: Record<string, { bg: string; text: string; abbr: string }> = {
-  "Stripe Ltd":          { bg: "#635bff", text: "white", abbr: "S" },
-  "GitLab":              { bg: "#fc6d26", text: "white", abbr: "GL" },
-  "Y Combinator":        { bg: "#f26522", text: "white", abbr: "YC" },
-  "Default":             { bg: "#0d9488", text: "white", abbr: "?" },
-};
+interface LiveJobPreview {
+  title: string;
+  company: string;
+  location: string;
+  salary: string | null;
+  applyUrl: string;
+}
 
-function JobBoardCard({ jobs }: { jobs: Opportunity[] }) {
+const COMPANY_COLORS = ["#0d9488", "#635bff", "#f26522", "#0ea5e9", "#34a853"];
+
+function JobBoardCard() {
   const router = useRouter();
+  const [jobs, setJobs] = useState<LiveJobPreview[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/jobs/search?page=1")
+      .then((res) => res.json())
+      .then((data) => {
+        if (active) setJobs((data.jobs || []).slice(0, 3));
+      })
+      .catch(() => {
+        if (active) setJobs([]);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => { active = false; };
+  }, []);
+
   return (
     <div className="feature-card rounded-2xl overflow-hidden shadow-lg border border-gray-100 flex flex-col">
       {/* Header */}
@@ -274,7 +293,7 @@ function JobBoardCard({ jobs }: { jobs: Opportunity[] }) {
           </div>
           <div>
             <h3 className="font-black text-white text-base leading-tight">Global Job Board</h3>
-            <p className="text-orange-100 text-[11px] font-medium">International Careers</p>
+            <p className="text-orange-100 text-[11px] font-medium">Live International Careers</p>
           </div>
         </div>
       </div>
@@ -282,49 +301,46 @@ function JobBoardCard({ jobs }: { jobs: Opportunity[] }) {
       {/* Body */}
       <div className="flex-1 bg-white p-4 flex flex-col gap-3">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-xs font-black text-gray-700">Featured Global Jobs</span>
-          <div className="flex gap-1">
-            <span className="text-[10px] text-gray-400 bg-gray-50 border border-gray-200 rounded px-2 py-0.5 font-semibold cursor-pointer hover:border-orange-300">⊞ Filter</span>
-            <span className="text-[10px] text-gray-400 bg-gray-50 border border-gray-200 rounded px-2 py-0.5 font-semibold cursor-pointer hover:border-orange-300">▼ Filter</span>
-          </div>
+          <span className="text-xs font-black text-gray-700">Featured Live Jobs</span>
         </div>
 
         {/* Job rows */}
-        {jobs.length === 0 ? (
-          <PlaceholderJobs />
+        {loading ? (
+          <div className="py-6 text-center text-xs text-gray-400 font-semibold">Loading live jobs…</div>
+        ) : jobs.length === 0 ? (
+          <div className="py-6 text-center text-xs text-gray-400 font-semibold">No live jobs available right now.</div>
         ) : (
-          jobs.map((job) => {
-            const c = COMPANY_COLORS[job.organization] || COMPANY_COLORS["Default"];
-            return (
+          jobs.map((job, i) => (
+            <div
+              key={`${job.applyUrl}-${i}`}
+              className="flex items-center gap-3 p-2.5 rounded-xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50/40 transition-all cursor-pointer group"
+              onClick={() => router.push("/jobs")}
+            >
               <div
-                key={job.id}
-                className="flex items-center gap-3 p-2.5 rounded-xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50/40 transition-all cursor-pointer group"
-                onClick={() => router.push("/jobs")}
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-black text-white flex-shrink-0 shadow-sm"
+                style={{ background: COMPANY_COLORS[i % COMPANY_COLORS.length] }}
               >
-                <div
-                  className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-black flex-shrink-0 shadow-sm"
-                  style={{ background: c.bg, color: c.text }}
-                >
-                  {c.abbr}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-bold text-gray-800 truncate group-hover:text-orange-700">
-                    {job.title.split("(")[0].trim()}
-                  </div>
-                  <div className="flex items-center gap-1 text-[10px] text-gray-400 mt-0.5">
-                    <MapPin className="w-2.5 h-2.5" />
-                    <span className="truncate">{job.country}</span>
-                  </div>
-                  <div className="text-[10px] font-semibold text-teal-600 mt-0.5 truncate">
-                    {job.fundingAmount}
-                  </div>
-                </div>
-                <button className="text-[10px] bg-orange-500 hover:bg-orange-600 text-white font-bold px-2.5 py-1.5 rounded-lg transition-colors whitespace-nowrap flex-shrink-0">
-                  Apply Now
-                </button>
+                {job.company[0]?.toUpperCase() || "?"}
               </div>
-            );
-          })
+              <div className="flex-1 min-w-0">
+                <div className="text-xs font-bold text-gray-800 truncate group-hover:text-orange-700">
+                  {job.title}
+                </div>
+                <div className="flex items-center gap-1 text-[10px] text-gray-400 mt-0.5">
+                  <MapPin className="w-2.5 h-2.5" />
+                  <span className="truncate">{job.location}</span>
+                </div>
+                {job.salary && (
+                  <div className="text-[10px] font-semibold text-teal-600 mt-0.5 truncate">
+                    {job.salary}
+                  </div>
+                )}
+              </div>
+              <button className="text-[10px] bg-orange-500 hover:bg-orange-600 text-white font-bold px-2.5 py-1.5 rounded-lg transition-colors whitespace-nowrap flex-shrink-0">
+                Apply Now
+              </button>
+            </div>
+          ))
         )}
 
         <button
@@ -335,35 +351,6 @@ function JobBoardCard({ jobs }: { jobs: Opportunity[] }) {
         </button>
       </div>
     </div>
-  );
-}
-
-function PlaceholderJobs() {
-  const jobs = [
-    { abbr: "S", bg: "#635bff", title: "Senior Software Engineer", loc: "Remote (USA)", sal: "$1,000–$19,000" },
-    { abbr: "M", bg: "#0ea5e9", title: "Marketing Director", loc: "London", sal: "$1,000–$10,000" },
-    { abbr: "G", bg: "#34a853", title: "Freelance Graphic Designer", loc: "Cape Town", sal: "$1,000–$79,000" },
-  ];
-  return (
-    <>
-      {jobs.map((j) => (
-        <div key={j.title} className="flex items-center gap-3 p-2.5 rounded-xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50/40 transition-all cursor-pointer group">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-black text-white flex-shrink-0 shadow-sm" style={{ background: j.bg }}>
-            {j.abbr}
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="text-xs font-bold text-gray-800 truncate">{j.title}</div>
-            <div className="flex items-center gap-1 text-[10px] text-gray-400 mt-0.5">
-              <MapPin className="w-2.5 h-2.5" /><span>{j.loc}</span>
-            </div>
-            <div className="text-[10px] font-semibold text-teal-600 mt-0.5">{j.sal}</div>
-          </div>
-          <button className="text-[10px] bg-orange-500 hover:bg-orange-600 text-white font-bold px-2.5 py-1.5 rounded-lg transition-colors whitespace-nowrap flex-shrink-0">
-            Apply Now
-          </button>
-        </div>
-      ))}
-    </>
   );
 }
 
