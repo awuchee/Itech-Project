@@ -93,8 +93,8 @@ export default function LandingNavbar({
         {/* Logo */}
         <button className="flex items-center gap-2.5 flex-shrink-0" onClick={() => go("Landing")}>
           <GHLogo />
-          <span className="hidden sm:block font-black text-xl tracking-tight text-gray-900">
-            <span className="text-teal-600">Global</span>Hub
+          <span className="hidden sm:block font-black text-xl tracking-tight text-gray-900 leading-tight">
+            <span className="text-teal-600">Global</span> Opportunities Hub
           </span>
         </button>
 

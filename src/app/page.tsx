@@ -106,7 +106,7 @@ export default function RootPage() {
     
     // Push welcome simulated notification
     setSimulatedNotifications(prev => [
-      { id: Date.now(), text: `Welcome to Global Hub, ${fullName}! Portal synchronized.`, date: "Just now", unread: true },
+      { id: Date.now(), text: `Welcome to Global Opportunities Hub, ${fullName}! Your dashboard is ready.`, date: "Just now", unread: true },
       ...prev
     ]);
   };
@@ -435,7 +435,7 @@ export default function RootPage() {
       {/* Styled Footer — dark app pages only */}
       {!isLanding && (
         <footer className="py-6 px-6 border-t border-white/5 bg-slate-950/40 text-center text-xs text-slate-500">
-          <p>© 2026 Global Opportunities Hub. Designed for high fidelity cross-device synchronization.</p>
+          <p>© 2026 Global Opportunities Hub (GH) · Jobs · Scholarships · Apprenticeships · Nanny Placements</p>
         </footer>
       )}
     </div>

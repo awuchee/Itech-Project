@@ -25,7 +25,7 @@ export default function Header({ userProfile, activeTab, setActiveTab, onSignOut
           <h1 className="text-xl font-black bg-gradient-to-r from-white via-slate-200 to-indigo-400 bg-clip-text text-transparent tracking-tight">
             Global Opportunities Hub
           </h1>
-          <p className="text-xs text-slate-400 font-medium">Your passport to global careers</p>
+          <p className="text-xs text-slate-400 font-medium">Jobs · Scholarships · Apprenticeships · Nanny Placements</p>
         </div>
       </div>
 

@@ -221,7 +221,7 @@ export default function LandingPage({ setActiveTab, opportunities }: LandingPage
                 <Globe className="w-4 h-4 text-white" />
               </div>
               <span className="font-black text-white text-sm">
-                <span className="text-teal-400">Global</span>Hub
+                <span className="text-teal-400">Global</span> Opportunities Hub
               </span>
             </div>
             <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs font-semibold">
@@ -243,7 +243,7 @@ export default function LandingPage({ setActiveTab, opportunities }: LandingPage
             </nav>
           </div>
           <div className="border-t border-gray-800 pt-5 text-center text-xs">
-            © 2026 GlobalHub · Designed for high-fidelity cross-device synchronization.
+            © 2026 Global Opportunities Hub (GH) · Jobs · Scholarships · Apprenticeships · Nanny Placements
           </div>
         </div>
       </footer>

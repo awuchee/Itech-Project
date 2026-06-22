@@ -85,10 +85,10 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
           <KeyRound className="w-8 h-8" />
         </div>
         <h2 className="text-2xl font-black tracking-tight text-white">
-          {isLogin ? "Welcome Back to Global Hub" : "Create Modern Account"}
+          {isLogin ? "Welcome Back to Global Opportunities Hub" : "Join Global Opportunities Hub"}
         </h2>
         <p className="text-slate-400 text-xs mt-1">
-          {isLogin ? "Sign in to access synchronized credentials" : "Track multi-device applications instantly"}
+          {isLogin ? "Sign in to access your global dashboard" : "Create your free account and start exploring"}
         </p>
       </div>
 
