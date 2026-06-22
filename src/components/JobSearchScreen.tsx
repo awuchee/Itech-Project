@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { Search, MapPin, Briefcase, ExternalLink, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Search, MapPin, Briefcase, ArrowRight, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
 
 interface LiveJob {
+  id: string;
   title: string;
   company: string;
   location: string;
@@ -21,6 +23,7 @@ interface SearchResponse {
 const RESULTS_PER_PAGE = 50;
 
 export default function JobSearchScreen() {
+  const router = useRouter();
   const [what, setWhat] = useState("");
   const [where, setWhere] = useState("");
   const [activeWhat, setActiveWhat] = useState("");
@@ -73,6 +76,15 @@ export default function JobSearchScreen() {
   };
 
   const totalPages = Math.max(1, Math.ceil(totalCount / RESULTS_PER_PAGE));
+
+  const openJobDetail = (job: LiveJob) => {
+    // Persist the full job so the detail page renders instantly without a
+    // round-trip, and still resolves correctly even if the server-side
+    // cache instance differs (Vercel may route /api/jobs/[id] to a
+    // separate serverless instance than the one that served this search).
+    sessionStorage.setItem(`job_detail_${job.id}`, JSON.stringify(job));
+    router.push(`/jobs/${job.id}`);
+  };
 
   return (
     <div className="space-y-6">
@@ -171,8 +183,12 @@ export default function JobSearchScreen() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {jobs.map((job, i) => (
             <div
-              key={`${job.applyUrl}-${i}`}
-              className="glass-panel rounded-2xl p-5 border border-white/5 flex flex-col gap-2.5 hover:border-indigo-500/40 transition-colors"
+              key={`${job.id}-${i}`}
+              onClick={() => openJobDetail(job)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === "Enter" && openJobDetail(job)}
+              className="glass-panel rounded-2xl p-5 border border-white/5 flex flex-col gap-2.5 hover:border-indigo-500/40 transition-colors cursor-pointer"
             >
               <h3 className="font-bold text-white text-base leading-snug">{job.title}</h3>
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-400">
@@ -184,15 +200,13 @@ export default function JobSearchScreen() {
                   <span className="text-emerald-400 font-bold">{job.salary}</span>
                 )}
               </div>
-              <p className="text-xs text-slate-400 leading-relaxed flex-1">{job.description}</p>
-              <a
-                href={job.applyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <p className="text-xs text-slate-400 leading-relaxed flex-1 line-clamp-3">{job.description}</p>
+              <button
+                onClick={(e) => { e.stopPropagation(); openJobDetail(job); }}
                 className="mt-2 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-colors"
               >
-                View & Apply <ExternalLink className="w-3.5 h-3.5" />
-              </a>
+                View Details <ArrowRight className="w-3.5 h-3.5" />
+              </button>
             </div>
           ))}
         </div>

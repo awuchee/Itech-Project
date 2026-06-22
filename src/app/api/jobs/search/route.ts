@@ -1,17 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { NormalizedJob, cacheJob } from "../../../../lib/jobsCache";
 
 const ADZUNA_BASE_URL = "https://api.adzuna.com/v1/api/jobs/gb/search";
 const RESULTS_PER_PAGE = 50;
 const CACHE_TTL_MS = 8 * 60 * 1000; // 8 minutes
-
-interface NormalizedJob {
-  title: string;
-  company: string;
-  location: string;
-  salary: string | null;
-  applyUrl: string;
-  description: string;
-}
 
 interface CacheEntry {
   expiresAt: number;
@@ -19,6 +11,7 @@ interface CacheEntry {
 }
 
 interface AdzunaJob {
+  id: string | number;
   title: string;
   company?: { display_name?: string };
   location?: { display_name?: string };
@@ -32,11 +25,6 @@ interface AdzunaJob {
 const responseCache = new Map<string, CacheEntry>();
 const inFlightRequests = new Map<string, Promise<{ count: number; jobs: NormalizedJob[] }>>();
 
-function truncate(text: string | undefined, maxLength: number): string {
-  if (!text) return "";
-  return text.length > maxLength ? `${text.slice(0, maxLength).trim()}…` : text;
-}
-
 function formatSalary(job: AdzunaJob): string | null {
   if (!job.salary_min && !job.salary_max) return null;
   if (job.salary_min && job.salary_max && job.salary_min !== job.salary_max) {
@@ -44,6 +32,18 @@ function formatSalary(job: AdzunaJob): string | null {
   }
   const value = job.salary_min || job.salary_max;
   return value ? `£${Math.round(value).toLocaleString()}` : null;
+}
+
+function normalizeJob(job: AdzunaJob): NormalizedJob {
+  return {
+    id: String(job.id),
+    title: job.title,
+    company: job.company?.display_name || "Unknown Company",
+    location: job.location?.display_name || "Not specified",
+    salary: formatSalary(job),
+    applyUrl: job.redirect_url,
+    description: (job.description || "").trim(),
+  };
 }
 
 async function fetchAdzunaJobs(
@@ -68,14 +68,11 @@ async function fetchAdzunaJobs(
   }
 
   const data = await response.json();
-  const jobs: NormalizedJob[] = (data.results || []).map((job: AdzunaJob) => ({
-    title: job.title,
-    company: job.company?.display_name || "Unknown Company",
-    location: job.location?.display_name || "Not specified",
-    salary: formatSalary(job),
-    applyUrl: job.redirect_url,
-    description: truncate(job.description, 220),
-  }));
+  const jobs: NormalizedJob[] = (data.results || []).map(normalizeJob);
+
+  // Populate the shared detail cache so /api/jobs/[id] can resolve these
+  // without a second Adzuna call (Adzuna has no public single-ad endpoint).
+  jobs.forEach(cacheJob);
 
   return { count: data.count ?? jobs.length, jobs };
 }
@@ -107,6 +104,7 @@ export async function GET(request: NextRequest) {
 
   const cached = responseCache.get(cacheKey);
   if (cached && cached.expiresAt > Date.now()) {
+    cached.data.jobs.forEach(cacheJob); // refresh detail-cache TTL on cache hits too
     return NextResponse.json(cached.data);
   }
 
