@@ -25,6 +25,9 @@ export default function NannyPage() {
       applicationRecords={applicationRecords}
       onPreloadDoc={handlePreloadDocDrawer}
       onAddReview={handleAddReview}
+      defaultCategory="Nanny & Care"
+      pageTitle="Nanny & Care Placements"
+      pageSubtitle="Connect with verified families worldwide for au pair, live-in nanny, newborn care, and travel nanny roles. All placements include background checks and visa support."
     />
   );
 }

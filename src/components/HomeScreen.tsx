@@ -29,6 +29,9 @@ interface HomeScreenProps {
   applicationRecords: ApplicationRecord[];
   onPreloadDoc: (opp: Opportunity) => void;
   onAddReview: (opportunityId: string | number, score: number) => void;
+  defaultCategory?: string;
+  pageTitle?: string;
+  pageSubtitle?: string;
 }
 
 export default function HomeScreen({
@@ -39,11 +42,14 @@ export default function HomeScreen({
   onApply,
   applicationRecords,
   onPreloadDoc,
-  onAddReview
+  onAddReview,
+  defaultCategory = "Any",
+  pageTitle = "Discover Global Work & Study Gateways",
+  pageSubtitle = "Search top scholarships, jobs with visa sponsorship, government immigration visas, and fully funded pathways. Tailor your submission documents instantly using our integrated model intelligence.",
 }: HomeScreenProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("Any");
-  const [selectedCategory, setSelectedCategory] = useState("Any");
+  const [selectedCategory, setSelectedCategory] = useState(defaultCategory);
   
   // Filter checkboxes
   const [fullyFundedOnly, setFullyFundedOnly] = useState(false);
@@ -151,10 +157,10 @@ export default function HomeScreen({
             <span>AI-Optimized Internships & Programs</span>
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-            Discover Global Work & Study Gateways
+            {pageTitle}
           </h2>
           <p className="text-slate-300 text-sm md:text-base leading-relaxed">
-            Search top scholarships, jobs with visa sponsorship, government immigration visas, and fully funded pathways. Tailor your submission documents instantly using our integrated model intelligence.
+            {pageSubtitle}
           </p>
         </div>
       </div>

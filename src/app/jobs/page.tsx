@@ -25,6 +25,9 @@ export default function JobsPage() {
       applicationRecords={applicationRecords}
       onPreloadDoc={handlePreloadDocDrawer}
       onAddReview={handleAddReview}
+      defaultCategory="Jobs Abroad"
+      pageTitle="Global Job Board"
+      pageSubtitle="Browse international remote and on-site jobs with visa sponsorship across tech, healthcare, finance, and more. Apply with AI-drafted cover letters."
     />
   );
 }

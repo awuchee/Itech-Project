@@ -25,6 +25,9 @@ export default function ScholarshipsPage() {
       applicationRecords={applicationRecords}
       onPreloadDoc={handlePreloadDocDrawer}
       onAddReview={handleAddReview}
+      defaultCategory="Scholarships"
+      pageTitle="Scholarship Opportunities"
+      pageSubtitle="Find fully-funded scholarships, grants, and academic fellowships worldwide — including DAAD, Fulbright, Gates Cambridge, and more. No IELTS options available."
     />
   );
 }

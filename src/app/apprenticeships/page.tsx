@@ -25,6 +25,9 @@ export default function ApprenticeshipsPage() {
       applicationRecords={applicationRecords}
       onPreloadDoc={handlePreloadDocDrawer}
       onAddReview={handleAddReview}
+      defaultCategory="Apprenticeships"
+      pageTitle="Apprenticeship Programmes"
+      pageSubtitle="Earn while you learn with paid apprenticeships in tech, skilled trades, digital marketing, and business — open to all entry levels across the UK and Europe."
     />
   );
 }
