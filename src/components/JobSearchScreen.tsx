@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { Search, MapPin, Briefcase, ExternalLink, ChevronLeft, ChevronRight, Loader2, AlertCircle } from "lucide-react";
+import { Search, MapPin, Briefcase, ExternalLink, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
 
 interface LiveJob {
   title: string;
@@ -142,11 +142,21 @@ export default function JobSearchScreen() {
         </div>
       )}
 
-      {/* Loading */}
+      {/* Loading — skeleton UI */}
       {loading && (
-        <div className="flex items-center justify-center py-20 text-slate-400">
-          <Loader2 className="w-6 h-6 animate-spin mr-2" />
-          Fetching live jobs…
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4" aria-busy="true" aria-label="Loading live jobs">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="glass-panel rounded-2xl p-5 border border-white/5 flex flex-col gap-3 animate-pulse">
+              <div className="h-4 bg-white/10 rounded-md w-3/4" />
+              <div className="flex gap-3">
+                <div className="h-3 bg-white/10 rounded-md w-1/3" />
+                <div className="h-3 bg-white/10 rounded-md w-1/4" />
+              </div>
+              <div className="h-3 bg-white/10 rounded-md w-full" />
+              <div className="h-3 bg-white/10 rounded-md w-5/6" />
+              <div className="h-9 bg-white/10 rounded-xl w-full mt-2" />
+            </div>
+          ))}
         </div>
       )}
 

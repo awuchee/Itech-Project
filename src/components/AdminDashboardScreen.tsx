@@ -180,7 +180,8 @@ export default function AdminDashboardScreen({
                 className="w-full px-4 py-3 bg-slate-950/40 border border-white/10 rounded-xl text-slate-300 text-sm focus:outline-none focus:border-indigo-505"
               >
                 <option value="Scholarships">Scholarships</option>
-                <option value="Jobs Abroad">Jobs Abroad</option>
+                <option value="Apprenticeships">Apprenticeships</option>
+                <option value="Nanny & Care">Nanny &amp; Care</option>
                 <option value="Internships">Internships</option>
                 <option value="Immigration Programs">Immigration Programs</option>
                 <option value="Startup Funding">Startup Funding</option>

@@ -306,7 +306,17 @@ function JobBoardCard() {
 
         {/* Job rows */}
         {loading ? (
-          <div className="py-6 text-center text-xs text-gray-400 font-semibold">Loading live jobs…</div>
+          <div className="space-y-2.5" aria-busy="true" aria-label="Loading live jobs">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-3 p-2.5 rounded-xl border border-gray-100 animate-pulse">
+                <div className="w-9 h-9 rounded-xl bg-gray-100 flex-shrink-0" />
+                <div className="flex-1 space-y-1.5">
+                  <div className="h-2.5 bg-gray-100 rounded w-3/4" />
+                  <div className="h-2 bg-gray-100 rounded w-1/2" />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : jobs.length === 0 ? (
           <div className="py-6 text-center text-xs text-gray-400 font-semibold">No live jobs available right now.</div>
         ) : (
@@ -395,7 +405,7 @@ function ScholarshipCard({ scholarships }: { scholarships: Opportunity[] }) {
             : s.deadline;
 
           return (
-            <div key={s.id} className="flex gap-3 p-2.5 rounded-xl border border-gray-100 hover:border-slate-300 hover:bg-slate-50/60 transition-all cursor-pointer group" onClick={() => router.push("/jobs")}>
+            <div key={s.id} className="flex gap-3 p-2.5 rounded-xl border border-gray-100 hover:border-slate-300 hover:bg-slate-50/60 transition-all cursor-pointer group" onClick={() => router.push("/scholarships")}>
               <div className={`w-9 h-9 rounded-xl border flex items-center justify-center flex-shrink-0 text-base ${iconBgs[i]}`}>
                 {icons[i]}
               </div>
@@ -423,7 +433,7 @@ function ScholarshipCard({ scholarships }: { scholarships: Opportunity[] }) {
         })}
 
         <button
-          onClick={() => router.push("/jobs")}
+          onClick={() => router.push("/scholarships")}
           className="mt-auto flex items-center justify-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-800 py-2 border-t border-gray-50 hover:underline transition-colors"
         >
           All Scholarships <ArrowRight className="w-3.5 h-3.5" />
@@ -510,7 +520,7 @@ function ApprenticeshipsCard() {
             <div
               key={i}
               className={`flex-1 rounded-xl bg-gradient-to-br ${a.color} p-3 text-white cursor-pointer hover:scale-[1.03] transition-transform shadow-sm`}
-              onClick={() => router.push("/jobs")}
+              onClick={() => router.push("/apprenticeships")}
             >
               <div className="text-2xl mb-1.5">{a.icon}</div>
               <div className="text-[11px] font-black leading-tight">{a.title}</div>
@@ -538,7 +548,7 @@ function ApprenticeshipsCard() {
         </div>
 
         <button
-          onClick={() => router.push("/jobs")}
+          onClick={() => router.push("/apprenticeships")}
           className="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-xl transition-colors mt-auto"
         >
           [ Apply ]
@@ -584,7 +594,7 @@ function NannyCareCard() {
             <div
               key={n.title}
               className="cursor-pointer group"
-              onClick={() => router.push("/jobs")}
+              onClick={() => router.push("/nanny")}
             >
               <div className={`rounded-xl bg-gradient-to-br ${n.color} aspect-square flex items-center justify-center text-3xl mb-1.5 group-hover:scale-105 transition-transform shadow-sm`}>
                 {n.emoji}
@@ -608,7 +618,7 @@ function NannyCareCard() {
         </div>
 
         <button
-          onClick={() => router.push("/jobs")}
+          onClick={() => router.push("/nanny")}
           className="mt-auto w-full py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold rounded-xl transition-colors"
         >
           [ View Family Profiles ]

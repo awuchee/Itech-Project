@@ -77,28 +77,6 @@ export const MOCK_COUNTRIES: CountryDetail[] = [
 
 export const MOCK_OPPORTUNITIES: Opportunity[] = [
   {
-    id: 1,
-    title: "Senior Software Engineer (Sponsorship & Relocation)",
-    organization: "Stripe Ltd",
-    country: "Ireland",
-    category: "Jobs Abroad",
-    deadline: "2026-08-30",
-    fundingAmount: "€110,000 - €140,000 EUR / Year",
-    isFullyFunded: false,
-    eligibility: "5+ years developing robust backend services, proficiency in Kotlin, Java, or Ruby, and a Bachelor's degree in Computer Science or equivalent experience.",
-    description: "Stripe is seeking experienced Software Engineers to join our core platform team in Dublin. We offer comprehensive visa sponsorship and premium moving assistance packages (flight, shipping, temporary corporate housing) for suitable international selectees.",
-    benefits: "Full relocation coverage, visa hosting, private medical and dental care, stock options (RSUs), 28 paid vacation days, gym stipend, and modern hardware choices.",
-    officialLink: "https://stripe.com/jobs",
-    datePosted: "2026-06-01",
-    status: "APPROVED",
-    isFeatured: true,
-    visaSponsorship: true,
-    remote: false,
-    noIeltsRequired: true,
-    govtSponsored: false,
-    rating: 4.8
-  },
-  {
     id: 2,
     title: "Gates Cambridge Fully Funded Scholarship",
     organization: "Bill & Melinda Gates Foundation",
@@ -141,28 +119,6 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     noIeltsRequired: true,
     govtSponsored: true,
     rating: 4.7
-  },
-  {
-    id: 4,
-    title: "Senior Product Designer (Fully Remote Worldwide)",
-    organization: "GitLab",
-    country: "Anywhere",
-    category: "Jobs Abroad",
-    deadline: "2026-07-25",
-    fundingAmount: "$95,000 - $130,000 USD / Year",
-    isFullyFunded: false,
-    eligibility: "High proficiency with Figma, extensive portfolio showing complex B2B desktop application dashboards, and 4+ years of asynchronous product design experience.",
-    description: "Join GitLab's fully remote, distributed, and asynchronous product design division. You will work on creating intuitive Developer Experience workflows that are used by millions of engineers globally.",
-    benefits: "Work from anywhere in the world, flexible hours, annual co-working allowance, home office setup budget, unlimited vacation policy, and annual global team retreats.",
-    officialLink: "https://about.gitlab.com/jobs",
-    datePosted: "2026-06-03",
-    status: "APPROVED",
-    isFeatured: true,
-    visaSponsorship: false,
-    remote: true,
-    noIeltsRequired: true,
-    govtSponsored: false,
-    rating: 4.6
   },
   {
     id: 5,

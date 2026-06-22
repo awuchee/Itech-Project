@@ -85,6 +85,13 @@ export async function GET(request: NextRequest) {
   const appKey = process.env.ADZUNA_APP_KEY;
 
   if (!appId || !appKey) {
+    const missing = [!appId && "ADZUNA_APP_ID", !appKey && "ADZUNA_APP_KEY"].filter(Boolean).join(", ");
+    console.error(
+      `[adzuna] Missing required environment variable(s): ${missing}. ` +
+      `Set them in .env.local for development and in your Vercel project's Environment Variables ` +
+      `(Production + Preview) for deployed environments. The job search API will return an empty ` +
+      `result set until this is fixed — it will never fall back to mock data.`
+    );
     return NextResponse.json(
       { count: 0, jobs: [], error: "Adzuna API credentials are not configured on the server." },
       { status: 500 }
