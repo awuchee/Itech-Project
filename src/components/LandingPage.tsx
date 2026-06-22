@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Search,
   Briefcase,
@@ -24,11 +25,11 @@ import {
 import { Opportunity } from "../types";
 
 interface LandingPageProps {
-  setActiveTab: (tab: string) => void;
   opportunities: Opportunity[];
 }
 
-export default function LandingPage({ setActiveTab, opportunities }: LandingPageProps) {
+export default function LandingPage({ opportunities }: LandingPageProps) {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
@@ -43,7 +44,7 @@ export default function LandingPage({ setActiveTab, opportunities }: LandingPage
     .filter((o) => o.category === "Scholarships")
     .slice(0, 3);
 
-  const handleSearch = () => setActiveTab("Home");
+  const handleSearch = () => router.push("/jobs");
   const handleSubscribe = () => {
     if (email.includes("@")) setSubscribed(true);
   };
@@ -149,10 +150,10 @@ export default function LandingPage({ setActiveTab, opportunities }: LandingPage
       {/* ═══════════════════════════ FEATURE CARDS ═══════════════════════════ */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-          <JobBoardCard jobs={featuredJobs} setActiveTab={setActiveTab} />
-          <ScholarshipCard scholarships={scholarships} setActiveTab={setActiveTab} />
-          <ApprenticeshipsCard setActiveTab={setActiveTab} />
-          <NannyCareCard setActiveTab={setActiveTab} />
+          <JobBoardCard jobs={featuredJobs} />
+          <ScholarshipCard scholarships={scholarships} />
+          <ApprenticeshipsCard />
+          <NannyCareCard />
         </div>
       </section>
 
@@ -226,15 +227,15 @@ export default function LandingPage({ setActiveTab, opportunities }: LandingPage
             </div>
             <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs font-semibold">
               {[
-                { label: "About Us", tab: "Countries" },
-                { label: "Trust & Safety", tab: "Home" },
-                { label: "Contact Support", tab: "Chat" },
-                { label: "Privacy Policy", tab: "Home" },
-                { label: "Terms", tab: "Home" },
+                { label: "About Us", href: "/about" },
+                { label: "Trust & Safety", href: "/jobs" },
+                { label: "Contact Support", href: "/contact" },
+                { label: "Privacy Policy", href: "/jobs" },
+                { label: "Terms", href: "/jobs" },
               ].map((link) => (
                 <button
                   key={link.label}
-                  onClick={() => setActiveTab(link.tab)}
+                  onClick={() => router.push(link.href)}
                   className="hover:text-teal-400 transition-colors"
                 >
                   {link.label}
@@ -261,13 +262,8 @@ const COMPANY_COLORS: Record<string, { bg: string; text: string; abbr: string }>
   "Default":             { bg: "#0d9488", text: "white", abbr: "?" },
 };
 
-function JobBoardCard({
-  jobs,
-  setActiveTab,
-}: {
-  jobs: Opportunity[];
-  setActiveTab: (t: string) => void;
-}) {
+function JobBoardCard({ jobs }: { jobs: Opportunity[] }) {
+  const router = useRouter();
   return (
     <div className="feature-card rounded-2xl overflow-hidden shadow-lg border border-gray-100 flex flex-col">
       {/* Header */}
@@ -303,7 +299,7 @@ function JobBoardCard({
               <div
                 key={job.id}
                 className="flex items-center gap-3 p-2.5 rounded-xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50/40 transition-all cursor-pointer group"
-                onClick={() => setActiveTab("Home")}
+                onClick={() => router.push("/jobs")}
               >
                 <div
                   className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-black flex-shrink-0 shadow-sm"
@@ -332,7 +328,7 @@ function JobBoardCard({
         )}
 
         <button
-          onClick={() => setActiveTab("Home")}
+          onClick={() => router.push("/jobs")}
           className="mt-auto flex items-center justify-center gap-1.5 text-xs font-bold text-orange-600 hover:text-orange-700 py-2 border-t border-gray-50 hover:underline transition-colors"
         >
           Browse All Jobs <ArrowRight className="w-3.5 h-3.5" />
@@ -374,13 +370,8 @@ function PlaceholderJobs() {
 /* ══════════════════════════════════════════════
    CARD 2 — Scholarship Opportunities
 ══════════════════════════════════════════════ */
-function ScholarshipCard({
-  scholarships,
-  setActiveTab,
-}: {
-  scholarships: Opportunity[];
-  setActiveTab: (t: string) => void;
-}) {
+function ScholarshipCard({ scholarships }: { scholarships: Opportunity[] }) {
+  const router = useRouter();
   const items = scholarships.length
     ? scholarships
     : [
@@ -417,7 +408,7 @@ function ScholarshipCard({
             : s.deadline;
 
           return (
-            <div key={s.id} className="flex gap-3 p-2.5 rounded-xl border border-gray-100 hover:border-slate-300 hover:bg-slate-50/60 transition-all cursor-pointer group" onClick={() => setActiveTab("Home")}>
+            <div key={s.id} className="flex gap-3 p-2.5 rounded-xl border border-gray-100 hover:border-slate-300 hover:bg-slate-50/60 transition-all cursor-pointer group" onClick={() => router.push("/jobs")}>
               <div className={`w-9 h-9 rounded-xl border flex items-center justify-center flex-shrink-0 text-base ${iconBgs[i]}`}>
                 {icons[i]}
               </div>
@@ -445,7 +436,7 @@ function ScholarshipCard({
         })}
 
         <button
-          onClick={() => setActiveTab("Home")}
+          onClick={() => router.push("/jobs")}
           className="mt-auto flex items-center justify-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-800 py-2 border-t border-gray-50 hover:underline transition-colors"
         >
           All Scholarships <ArrowRight className="w-3.5 h-3.5" />
@@ -485,7 +476,8 @@ const APPRENTICESHIPS = [
   },
 ];
 
-function ApprenticeshipsCard({ setActiveTab }: { setActiveTab: (t: string) => void }) {
+function ApprenticeshipsCard() {
+  const router = useRouter();
   const [idx, setIdx] = useState(0);
 
   const prev = () => setIdx((i) => (i - 1 + APPRENTICESHIPS.length) % APPRENTICESHIPS.length);
@@ -531,7 +523,7 @@ function ApprenticeshipsCard({ setActiveTab }: { setActiveTab: (t: string) => vo
             <div
               key={i}
               className={`flex-1 rounded-xl bg-gradient-to-br ${a.color} p-3 text-white cursor-pointer hover:scale-[1.03] transition-transform shadow-sm`}
-              onClick={() => setActiveTab("Home")}
+              onClick={() => router.push("/jobs")}
             >
               <div className="text-2xl mb-1.5">{a.icon}</div>
               <div className="text-[11px] font-black leading-tight">{a.title}</div>
@@ -559,7 +551,7 @@ function ApprenticeshipsCard({ setActiveTab }: { setActiveTab: (t: string) => vo
         </div>
 
         <button
-          onClick={() => setActiveTab("Home")}
+          onClick={() => router.push("/jobs")}
           className="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-xl transition-colors mt-auto"
         >
           [ Apply ]
@@ -578,7 +570,8 @@ const NANNY_TYPES = [
   { title: "Temporary Travel Nanny", location: "London, UK", color: "from-sky-400 to-blue-500", emoji: "✈️" },
 ];
 
-function NannyCareCard({ setActiveTab }: { setActiveTab: (t: string) => void }) {
+function NannyCareCard() {
+  const router = useRouter();
   return (
     <div className="feature-card rounded-2xl overflow-hidden shadow-lg border border-gray-100 flex flex-col">
       {/* Header */}
@@ -604,7 +597,7 @@ function NannyCareCard({ setActiveTab }: { setActiveTab: (t: string) => void }) 
             <div
               key={n.title}
               className="cursor-pointer group"
-              onClick={() => setActiveTab("Home")}
+              onClick={() => router.push("/jobs")}
             >
               <div className={`rounded-xl bg-gradient-to-br ${n.color} aspect-square flex items-center justify-center text-3xl mb-1.5 group-hover:scale-105 transition-transform shadow-sm`}>
                 {n.emoji}
@@ -628,7 +621,7 @@ function NannyCareCard({ setActiveTab }: { setActiveTab: (t: string) => void }) 
         </div>
 
         <button
-          onClick={() => setActiveTab("Home")}
+          onClick={() => router.push("/jobs")}
           className="mt-auto w-full py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold rounded-xl transition-colors"
         >
           [ View Family Profiles ]
