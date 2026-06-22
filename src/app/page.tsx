@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Navigation from "../components/Navigation";
+import LandingNavbar from "../components/LandingNavbar";
+import LandingPage from "../components/LandingPage";
 import AuthScreen from "../components/AuthScreen";
 import HomeScreen from "../components/HomeScreen";
 import AiChatbotScreen from "../components/AiChatbotScreen";
@@ -17,7 +19,7 @@ import { callGemini } from "../lib/gemini";
 import { BellRing, Sparkles, X, Check, ShieldAlert, AlertTriangle } from "lucide-react";
 
 export default function RootPage() {
-  const [activeTab, setActiveTab] = useState<string>("Home");
+  const [activeTab, setActiveTab] = useState<string>("Landing");
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   
   // Opportunities state (seeded with mock list originally)
@@ -248,26 +250,50 @@ export default function RootPage() {
     setSimulatedNotifications(prev => prev.map(n => ({ ...n, unread: false })));
   };
 
-  return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
-      {/* Upper header */}
-      <Header 
-        userProfile={userProfile} 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
-        onSignOut={handleSignOut} 
-      />
+  const isLanding = activeTab === "Landing";
 
-      {/* Navigation tabs row */}
-      <Navigation 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
-        userProfile={userProfile} 
-        notificationCount={notificationCount}
-        setNotificationsOpen={setNotificationsOpen}
-      />
+  return (
+    <div className={`min-h-screen flex flex-col ${isLanding ? "bg-white" : "bg-slate-950 text-slate-100"}`}>
+
+      {/* ── Landing page: white nav ── */}
+      {isLanding ? (
+        <LandingNavbar
+          userProfile={userProfile}
+          notificationCount={notificationCount}
+          setActiveTab={setActiveTab}
+          onSignOut={handleSignOut}
+          setNotificationsOpen={setNotificationsOpen}
+        />
+      ) : (
+        <>
+          {/* Upper header */}
+          <Header
+            userProfile={userProfile}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            onSignOut={handleSignOut}
+          />
+          {/* Navigation tabs row */}
+          <Navigation
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            userProfile={userProfile}
+            notificationCount={notificationCount}
+            setNotificationsOpen={setNotificationsOpen}
+          />
+        </>
+      )}
+
+      {/* ── Landing page: full-width, no max-w wrapper ── */}
+      {isLanding && (
+        <LandingPage
+          setActiveTab={setActiveTab}
+          opportunities={opportunities}
+        />
+      )}
 
       {/* Active page workspace */}
+      {!isLanding && (
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8">
         {activeTab === "Home" && (
           <HomeScreen 
@@ -341,6 +367,7 @@ export default function RootPage() {
           <AuthScreen onAuthSuccess={handleAuthSuccess} />
         )}
       </main>
+      )}
 
       {/* Floating Push Notifications Drawer */}
       {notificationsOpen && (
@@ -405,10 +432,12 @@ export default function RootPage() {
         </div>
       )}
 
-      {/* Styled Footer */}
-      <footer className="py-6 px-6 border-t border-white/5 bg-slate-950/40 text-center text-xs text-slate-500">
-        <p>© 2026 Global Opportunities Hub. Designed for high fidelity cross-device synchronization.</p>
-      </footer>
+      {/* Styled Footer — dark app pages only */}
+      {!isLanding && (
+        <footer className="py-6 px-6 border-t border-white/5 bg-slate-950/40 text-center text-xs text-slate-500">
+          <p>© 2026 Global Opportunities Hub. Designed for high fidelity cross-device synchronization.</p>
+        </footer>
+      )}
     </div>
   );
 }
